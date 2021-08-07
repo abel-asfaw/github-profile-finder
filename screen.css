@@ -1,0 +1,41 @@
+body {
+    font-family: 'DM Sans', Lato, Sans-Serif;
+}
+
+/* increase font-size for placeholder and input text */
+input[type="text"],
+input::placeholder {
+    font-size: medium;
+}
+
+input[type="text"] {
+    border: 1px solid #ced4da;
+    border-radius: 2px;
+}
+
+/* add hover effect only on non-touch screen devices */
+@media(hover: hover) and (pointer: fine) {
+
+    .container .navbar-brand {
+        transition: all 0.2s ease;
+    }
+
+    .container .navbar-brand:hover {
+        transform: scale(1.1);
+    }
+
+    /* add transition for the View Profile button */
+    .row a.btn {
+        color: black;
+        border: .5px solid rgb(0, 0, 0);
+        background: linear-gradient(white, white 50%, black 50%, black);
+        background-size: 100% 200%;
+        transition: all 0.2s ease;
+    }
+
+    /* add transition for the View Profile button */
+    .row a.btn:hover {
+        background-position: 100% 100%;
+        color: white;
+    }
+}
