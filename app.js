@@ -33,6 +33,7 @@ class UI {
     constructor() {
         this.profile = document.getElementById('profile');
     }
+    // display user profile and its information
     showProfile(user) {
         this.profile.innerHTML = `
         <div class="card card-body mb-3">
@@ -76,7 +77,7 @@ class UI {
                             <span class="badge badge-success">Forks: ${repo.forks_count}</span>
                         </div>
                     </div>
-                </div>`
+                </div>`;
             });
         } else {
             output = `
@@ -86,78 +87,66 @@ class UI {
                         <em>${user.login}</em> doesn’t have any public repositories yet.
                     </div>
                 </div>
-            </div>`
+            </div>`;
         }
         document.getElementById('repos').innerHTML = output;
     }
-    // display error alerts
+    // display error message
     showAlert(msg, classes) {
-        // create div
         const div = document.createElement('div');
-        // add classes
         div.className = classes;
-        // add text
         div.appendChild(document.createTextNode(msg));
-        // insert alert
         document.getElementById('profile').appendChild(div);
-
     }
-    // clear alert message
     clearAlert() {
         if (document.getElementsByClassName('alert-danger').length > 0) {
             document.querySelector('.alert-danger').remove();
         }
     }
-    // clear profile
     clearProfile() {
         this.profile.innerHTML = '';
     }
 }
 
-// Initialize UI
+// initialize UI object
 const ui = new UI();
-// Initialize GitHub
+// initialize GitHub profile object
 const gitHub = new GitHub();
-
-// Input Field
+// grab search field
 const searchUser = document.getElementById('search-user');
 
-// Remove Border On Input Focus (styling reasons)
+// remove border on input focus (styling reasons)
 searchUser.addEventListener('focus', () => {
     searchUser.style.border = 'none';
 });
 
-// Add Border Back on Blur (styling reasons)
+// add border back on blur (styling reasons)
 searchUser.addEventListener('blur', () => {
     searchUser.style.border = '1px solid #ced4da';
 });
 
-// Search Input
+// grab input as it's being typed in the search field and display results
 searchUser.addEventListener('input', (e) => {
-    // get text being typed in
     const userText = e.target.value;
     if (userText !== '') {
-        // make http call
         gitHub.getUser(userText)
             .then(data => {
                 if (data.profile.message === 'Not Found') {
-                    // show alert
+                    // show alert if username is not found
                     if (document.getElementsByClassName('alert-danger').length < 1) {
                         ui.clearProfile();
                         ui.showAlert('User not found.', 'alert alert-danger');
                     }
                 } else {
-                    // clear any previous alerts
+                    // clear any previous error alerts and show profile if found
                     ui.clearAlert();
-                    // show profile
                     ui.showProfile(data.profile);
                     ui.showRepos(data.profile, data.repos);
                 }
             });
     } else {
-        // clear any previous alerts
+        // clear any previous error alerts and clear profile
         ui.clearAlert();
-        // clear profile
         ui.clearProfile();
         ui.clearAlert();
     }
